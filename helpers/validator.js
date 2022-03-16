@@ -34,8 +34,15 @@ const _checkFeeLocale = (feeLocale, res) => {
     }
 }
 
+const _checkFeeEntity = (feeEntity, res) => {
+    if (FEE_ENTITY.includes(feeEntity)) {
+        return feeEntity;
+    }
+    else {
+        _showError(res, 400, `Invalid fee entity ${feeEntity}`);
+    }
+}
 
 
-const checkFeeEntity = (feeEntity, res)
 
-module.exports = { _checkFeesId, _checkFeesCurrency, _checkFeeLocale };
+module.exports = { _checkFeesId, _checkFeesCurrency, _checkFeeLocale, _checkFeeEntity };
