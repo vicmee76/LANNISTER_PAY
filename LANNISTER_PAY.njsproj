@@ -28,8 +28,23 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".env">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="api\controllers\compute_transactiion_fees_controller.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="api\controllers\fees_controller.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="api\routes\compute_transaction_fees_route.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="api\routes\fees_route.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="app.js" />
-    <Content Include="config\server.js">
+    <Content Include="server.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
@@ -39,7 +54,6 @@
     <Folder Include="api\controllers\" />
     <Folder Include="api\services\" />
     <Folder Include="api\routes\" />
-    <Folder Include="config\" />
     <Folder Include="helpers\" />
     <Folder Include="api\" />
   </ItemGroup>
