@@ -4,6 +4,16 @@
   "description": "LANNISTER_PAY",
   "main": "app.js",
   "author": {
-    "name": ""
+    "name": "Victor Nwogu"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongodb": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
