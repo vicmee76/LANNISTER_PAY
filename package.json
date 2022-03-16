@@ -1,0 +1,9 @@
+{
+  "name": "lannister_pay",
+  "version": "0.0.0",
+  "description": "LANNISTER_PAY",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  }
+}
