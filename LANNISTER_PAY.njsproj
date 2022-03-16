@@ -37,6 +37,9 @@
     <Content Include="api\controllers\fees_controller.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="api\middleware\fees_middleware.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="api\routes\compute_transaction_fees_route.js">
       <SubType>Code</SubType>
     </Content>
@@ -44,6 +47,12 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="app.js" />
+    <Content Include="helpers\response.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="helpers\validator.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="server.js">
       <SubType>Code</SubType>
     </Content>
@@ -52,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api\controllers\" />
+    <Folder Include="api\middleware\" />
     <Folder Include="api\services\" />
     <Folder Include="api\routes\" />
     <Folder Include="helpers\" />
