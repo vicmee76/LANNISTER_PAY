@@ -2,7 +2,8 @@
 const { _showError } = require("./response");
 
 const FEE_LOCALE = ['LOCL', 'INTL', '*'];
-const FEE_ENTITY = ['CREDIT-CARD', 'DEBIT-CARD', 'BANK-ACCOUNT', 'USSD', 'WALLET-ID', '*']
+const FEE_ENTITY = ['CREDIT-CARD', 'DEBIT-CARD', 'BANK-ACCOUNT', 'USSD', 'WALLET-ID', '*'];
+const FEE_TYPE = ['FLAT', 'PERC', 'FLAT_PERC'];
 
 
 const  _checkFeesId = (feesId, res) => {
@@ -45,4 +46,43 @@ const _checkFeeEntity = (feeEntity, res) => {
 
 
 
-module.exports = { _checkFeesId, _checkFeesCurrency, _checkFeeLocale, _checkFeeEntity };
+const _otherChecks = (item, res) => {
+    if (item === ":" || item == "APPLY") {
+        return true;
+    }
+    else {
+        _showError(res, 400, `Invalid item ${item}`);
+    }
+}
+
+
+const _checkFeeType = (feeType, res) => {
+    if (FEE_TYPE.includes(feeType)) {
+        return feeType;
+    }
+    else {
+        _showError(res, 400, `Invalid item ${feeType}`);
+    }
+}
+
+
+const _checkFeeValue = (feeValue, res) => {
+    if (feeValue >= 0) {
+        return feeValue;
+    }
+    else {
+        _showError(res, 400, `Invalid fee value ${feeValue}`);
+    }
+}
+
+
+module.exports =
+{
+    _checkFeesId,
+    _checkFeesCurrency,
+    _checkFeeLocale,
+    _checkFeeEntity,
+    _otherChecks,
+    _checkFeeType,
+    _checkFeeValue
+};
