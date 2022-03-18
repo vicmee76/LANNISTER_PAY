@@ -7,7 +7,8 @@ const {
     _checkFeeEntity,
     _otherChecks,
     _checkFeeType,
-    _checkFeeValue
+    _checkFeeValue,
+    _sendError
 } = require("../../helpers/validator");
 
 
@@ -15,9 +16,11 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
     let feeSpecData = [];
     let feesResult = [];
 
+    let tree = new BST();
+
     if (feesSpecs.length > 0) {
         let specLength = feesSpecs.length;
-        for (let i = 0; i < specLength ; i++) {
+        for (let i = 0; i < specLength; i++) {
             feeSpecData.push(feesSpecs[i]);
         }
 
@@ -45,7 +48,19 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
             else {
                 feeValue = _checkFeeValue(item[7]);
             }
-            feesResult.push({
+            //feesResult.push({
+            //    "FeeId": feeId,
+            //    "FeeCurrency": curreny,
+            //    "FeeLocale": feeLocale,
+            //    "FeeEntity": feeEntity,
+            //    "EntityProperty": entityProperty,
+            //    "FeeType": feeType,
+            //    "FeeValue": feeValue,
+            //    "PercValue": percValue === undefined ? null : percValue,
+            //    "Specificity": feeSpecData[i].split('*').length - 1
+            //});
+
+            var data = {
                 "FeeId": feeId,
                 "FeeCurrency": curreny,
                 "FeeLocale": feeLocale,
@@ -55,13 +70,61 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
                 "FeeValue": feeValue,
                 "PercValue": percValue === undefined ? null : percValue,
                 "Specificity": feeSpecData[i].split('*').length - 1
-            });
+            };
+            tree.insert(data);
         }
-        return await feesResult;
+        return await tree;
+        //return await feesResult;s
     }
     else {
         helpers._showError(res, 500, "Fees configuration spec is null");
     }
 }
+
+function Node(data, left, right) {
+    this.data = data;
+    this.left = left;
+    this.right = right;
+    this.show = show;
+}
+
+
+function BST() {
+    this.root = null;
+    this.insert = insert;
+}
+
+
+function show() {
+    return this.data;
+}
+
+
+function insert(data) {
+    var n = new Node(data, null, null);
+    if (this.root == null) {
+        this.root = n;
+    } else {
+        var current = this.root;
+        var parent;
+        while (true) {
+            parent = current;
+            if (data["Specificity"] < current.data["Specificity"]) {
+                current = current.left;
+                if (current == null) {
+                    parent.left = n;
+                    break;
+                }
+            } else {
+                current = current.right;
+                if (current == null) {
+                    parent.right = n;
+                    break;
+                }
+            }
+        }
+    }
+}
+
 
 module.exports = { _feesMiddleWearAction };

@@ -1,30 +1,38 @@
-const { Binary } = require("mongodb");
 const helpers = require("../../helpers/response");
+const { _clearError, _sendError } = require("../../helpers/validator");
 const { _feesMiddleWearAction } = require("../middleware/fees_middleware");
 
+let _feesResult;
 
-exports._postFeesController = async (req, res) => {
+exports._feesController = async (req, res) => {
     try {
         const data = req.body;
         if (data === null || data.FeeConfigurationSpec === "")
             helpers._showError(res, 400, "Fees configuration spec cannot be null");
         let feesConfigSpec = data.FeeConfigurationSpec.split("\n");
-        let _feesResult = await _feesMiddleWearAction(feesConfigSpec, res);
-        if (_feesResult.length > 0) {
-            console.table(_feesResult);
+         _feesResult = await _feesMiddleWearAction(feesConfigSpec, res);
+
+        if (_sendError().length > 0) {
+            _clearError();
+            helpers._showError(res, 500, _feesResult);
+        }
+        else {
             return res.status(200).json({
                 "status": "ok"
             });
-        }
-        else {
-            helpers._showError(res, 500, "Something went wrong tring to validate fees configuration spec.");
         }
     }
     catch (e) {
         helpers._showError(res, 500, e.message);
     }
-    
 };
 
-    6
-5       7
+
+exports._ComputeTransactionFees = async (req, res) => {
+    try {
+
+    } catch (e) {
+
+    }
+
+}

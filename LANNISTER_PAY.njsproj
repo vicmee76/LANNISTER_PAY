@@ -50,6 +50,9 @@
     <Content Include="helpers\response.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="helpers\Trees.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="helpers\validator.js">
       <SubType>Code</SubType>
     </Content>

@@ -5,13 +5,15 @@ const FEE_LOCALE = ['LOCL', 'INTL', '*'];
 const FEE_ENTITY = ['CREDIT-CARD', 'DEBIT-CARD', 'BANK-ACCOUNT', 'USSD', 'WALLET-ID', '*'];
 const FEE_TYPE = ['FLAT', 'PERC', 'FLAT_PERC'];
 
+let _erroMsg = [];
+
 
 const  _checkFeesId = (feesId, res) => {
     if (feesId.length === 8 && feesId.match(/^[0-9a-zA-Z]+$/)) {
         return feesId;
     }
     else {
-         _showError(res, 400, `Invalid fees ${feesId}`);
+        _erroMsg.push(`Invalid fees ${feesId}`);
     }
 }
 
@@ -21,7 +23,7 @@ const _checkFeesCurrency = (feeCurrency, res) => {
         return feeCurrency;
     }
     else {
-         _showError(res, 400, `Invalid currency ${feeCurrency}`);
+        _erroMsg.push(`Invalid currency ${feeCurrency}`);
     }
 }
 
@@ -31,7 +33,7 @@ const _checkFeeLocale = (feeLocale, res) => {
         return feeLocale;
     }
     else {
-        _showError(res, 400, `Invalid fee locale ${feeLocale}`);
+        _erroMsg.push(`Invalid fee locale ${feeLocale}`);
     }
 }
 
@@ -40,7 +42,7 @@ const _checkFeeEntity = (feeEntity, res) => {
         return feeEntity;
     }
     else {
-        _showError(res, 400, `Invalid fee entity ${feeEntity}`);
+        _erroMsg.push(`Invalid fee entity ${feeEntity}`);
     }
 }
 
@@ -51,7 +53,7 @@ const _otherChecks = (item, res) => {
         return true;
     }
     else {
-        _showError(res, 400, `Invalid item ${item}`);
+        _erroMsg.push(`Invalid item ${item}`);
     }
 }
 
@@ -61,7 +63,7 @@ const _checkFeeType = (feeType, res) => {
         return feeType;
     }
     else {
-        _showError(res, 400, `Invalid item ${feeType}`);
+        _erroMsg.push(`Invalid item ${feeType}`);
     }
 }
 
@@ -71,8 +73,17 @@ const _checkFeeValue = (feeValue, res) => {
         return feeValue;
     }
     else {
-        _showError(res, 400, `Invalid fee value ${feeValue}`);
+        _erroMsg.push(`Invalid fee value ${feeValue}`);
     }
+}
+
+
+const _sendError = () => {
+    return _erroMsg;
+}
+
+const _clearError = () => {
+    return _erroMsg.length = 0;
 }
 
 
@@ -84,5 +95,7 @@ module.exports =
     _checkFeeEntity,
     _otherChecks,
     _checkFeeType,
-    _checkFeeValue
+    _checkFeeValue,
+    _sendError,
+    _clearError
 };
