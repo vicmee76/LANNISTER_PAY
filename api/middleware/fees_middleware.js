@@ -48,19 +48,7 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
             else {
                 feeValue = _checkFeeValue(item[7]);
             }
-            //feesResult.push({
-            //    "FeeId": feeId,
-            //    "FeeCurrency": curreny,
-            //    "FeeLocale": feeLocale,
-            //    "FeeEntity": feeEntity,
-            //    "EntityProperty": entityProperty,
-            //    "FeeType": feeType,
-            //    "FeeValue": feeValue,
-            //    "PercValue": percValue === undefined ? null : percValue,
-            //    "Specificity": feeSpecData[i].split('*').length - 1
-            //});
-
-            var data = {
+            feesResult.push({
                 "FeeId": feeId,
                 "FeeCurrency": curreny,
                 "FeeLocale": feeLocale,
@@ -70,11 +58,23 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
                 "FeeValue": feeValue,
                 "PercValue": percValue === undefined ? null : percValue,
                 "Specificity": feeSpecData[i].split('*').length - 1
-            };
-            tree.insert(data);
+            });
+
+            //var data = {
+            //    "FeeId": feeId,
+            //    "FeeCurrency": curreny,
+            //    "FeeLocale": feeLocale,
+            //    "FeeEntity": feeEntity,
+            //    "EntityProperty": entityProperty,
+            //    "FeeType": feeType,
+            //    "FeeValue": feeValue,
+            //    "PercValue": percValue === undefined ? null : percValue,
+            //    "Specificity": feeSpecData[i].split('*').length - 1
+            //};
+            //tree.insert(data);
         }
-        return await tree;
-        //return await feesResult;s
+        //return await tree;
+        return await feesResult;
     }
     else {
         helpers._showError(res, 500, "Fees configuration spec is null");
@@ -92,6 +92,7 @@ function Node(data, left, right) {
 function BST() {
     this.root = null;
     this.insert = insert;
+    this.find = find;
 }
 
 
@@ -125,6 +126,24 @@ function insert(data) {
         }
     }
 }
+
+
+
+function find(data) {
+    var current = this.root;
+    while (current.data != data) {
+        if (data < current.data) {
+            current = current.left;
+        } else {
+            current = current.right;
+        }
+        if (current == null) {
+            return null;
+        }
+    }
+    return current;
+}
+
 
 
 module.exports = { _feesMiddleWearAction };

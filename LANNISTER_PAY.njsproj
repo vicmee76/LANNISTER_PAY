@@ -31,9 +31,6 @@
     <Content Include=".env">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="api\controllers\compute_transactiion_fees_controller.js">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="api\controllers\fees_controller.js">
       <SubType>Code</SubType>
     </Content>
@@ -48,9 +45,6 @@
     </Content>
     <Content Include="app.js" />
     <Content Include="helpers\response.js">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="helpers\Trees.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="helpers\validator.js">
