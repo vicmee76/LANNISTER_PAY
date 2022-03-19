@@ -1,6 +1,4 @@
 
-const { _showError } = require("./response");
-
 const FEE_LOCALE = ['LOCL', 'INTL', '*'];
 const FEE_ENTITY = ['CREDIT-CARD', 'DEBIT-CARD', 'BANK-ACCOUNT', 'USSD', 'WALLET-ID', '*'];
 const FEE_TYPE = ['FLAT', 'PERC', 'FLAT_PERC'];

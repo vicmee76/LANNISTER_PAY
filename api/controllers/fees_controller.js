@@ -4,7 +4,6 @@ const { _feesMiddleWearAction } = require("../middleware/fees_middleware");
 const {
     _clearError,
     _sendError,
-    _checkFeesCurrency,
     _checkFeeEntity,
     compareCurrencyOrFeeEntityOrLocal,
     compareEntityProperty
@@ -20,7 +19,7 @@ exports._feesController = async (req, res) => {
         if (data === null || data.FeeConfigurationSpec === "")
             helpers._showError(res, 400, "Fees configuration spec cannot be null");
         let feesConfigSpec = data.FeeConfigurationSpec.split("\n");
-         _feesResult = await _feesMiddleWearAction(feesConfigSpec, res);
+        _feesResult = await _feesMiddleWearAction(feesConfigSpec, res);
 
         if (_sendError().length > 0) {
             helpers._showError(res, 500, _sendError());

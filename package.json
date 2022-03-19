@@ -1,13 +1,13 @@
 {
   "name": "lannister_pay",
   "version": "0.0.0",
-  "description": "LANNISTER_PAY",
+  "description": "A project called LANNISTER PAY by flutter-wave. This applications uses MongoDB for storing Fees configuration Spec.",
   "main": "app.js",
   "author": {
     "name": "Victor Nwogu"
   },
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "body-parser": "^1.19.2",

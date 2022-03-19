@@ -8,7 +8,6 @@ const {
     _otherChecks,
     _checkFeeType,
     _checkFeeValue,
-    _sendError
 } = require("../../helpers/validator");
 
 
