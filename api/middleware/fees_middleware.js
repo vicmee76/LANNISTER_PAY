@@ -72,17 +72,17 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
 
 
 
-const _getAppliedFee = async (amount, feeType, feeValue, percValue) => {
+const _getAppliedFee =  (amount, feeType, feeValue, percValue) => {
     return appliedFee = _calculateFeeType(feeType, feeValue, percValue, amount);
 }
 
 
-const _getchargeAmount = async (bearsFees, amount) => {
+const _getchargeAmount = (bearsFees, amount) => {
     return chargeAmount = bearsFees === true ? amount + appliedFee : amount;
 }
 
 
-const _getsettlementAmount = async (chargeAmount, appliedFee) => {
+const _getsettlementAmount = (chargeAmount, appliedFee) => {
     return settlementAmount = chargeAmount - appliedFee;
 }
 

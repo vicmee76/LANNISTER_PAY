@@ -10,7 +10,7 @@ const {
 } = require("../../helpers/validator");
 
 const {
-    _feesMiddleWearAction, _feesMiddleWearAction,
+    _feesMiddleWearAction,
     _getAppliedFee,
     _getchargeAmount,
     _getsettlementAmount } = require("../middleware/fees_middleware");
@@ -71,7 +71,7 @@ exports._feesController = async (req, res) => {
 exports._ComputeTransactionFees = async (req, res) => {
     try {
         const data = req.body;
-        let Customers = data.Customers;
+        let Customer = data.Customer;
         let PaymentEntity = data.PaymentEntity;
         let payCurrency = data.Currency;
         let foundFee = [];
@@ -79,23 +79,6 @@ exports._ComputeTransactionFees = async (req, res) => {
         let payLocale = data.CurrencyCountry === PaymentEntity.Country ? "LOCL" : "INTL";
 
         let feesLength = _feesResult.length;
-
-        //FeesModel.find(
-        //    {
-        //        $and: [
-        //            { $or: [{ FeeCurrency: payCurrency }, { FeeCurrency: "*" }] },
-        //            { $or: [{ FeeEntity: payEntity }, { FeeEntity: "*" }] },
-        //            { $or: [{ FeeLocale: payLocale }, { FeeLocale: "*" }] },
-        //            { $or: [{ EntityProperty: PaymentEntity.Issuer }, { EntityProperty: PaymentEntity.Brand }, { EntityProperty: PaymentEntity.Number }, { EntityProperty: PaymentEntity.SixID }, { EntityProperty: "*" }] },
-        //        ]
-        //    }
-        //)
-        //    .select("-_id -__v")
-        //    .exec()
-        //    .then(result => {
-        //        helpers._showError(res, 500, result);
-        //    })
-        //    .catch();
 
         if (feesLength > 0) {
             if (data.Amount >= 0) {
@@ -115,7 +98,16 @@ exports._ComputeTransactionFees = async (req, res) => {
                         }
                     }
                     if (foundFee.length > 0) {
-                       
+                        let appliedFee = _getAppliedFee(data.Amount, foundFee[0]["FeeType"], foundFee[0]["FeeValue"], foundFee[0]["PercValue"]);
+                        let chargeAmount = _getchargeAmount(Customer.BearsFee, data.Amount);
+                        let settlementAmount = _getsettlementAmount(chargeAmount, appliedFee);
+
+                       return await res.status(200).json({
+                            "AppliedFeeID": _feesResult[0]["FeeId"],
+                            "AppliedFeeValue": appliedFee,
+                            "ChargeAmount": chargeAmount,
+                            "SettlementAmount": settlementAmount,
+                        });
                     }
                     else {
                         helpers._showError(res, 500, "No payment template was found for this payload");

@@ -97,7 +97,7 @@ const _calculateFeeType = (feeType, feeValue, percValue, transAmt) => {
     else if (feeType === "PERC") {
         AppliedFeeValue = (feeValue / 100) * transAmt;
     }
-    return AppliedFeeValue;
+    return Math.round(AppliedFeeValue);
 }
 
 
