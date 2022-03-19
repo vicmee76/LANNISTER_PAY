@@ -57,23 +57,14 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
                 "FeeType": feeType,
                 "FeeValue": feeValue,
                 "PercValue": percValue === undefined ? null : percValue,
-                "Specificity": feeSpecData[i].split('*').length - 1
+                "Specific": feeSpecData[i].split('*').length - 1
             });
-
-            //var data = {
-            //    "FeeId": feeId,
-            //    "FeeCurrency": curreny,
-            //    "FeeLocale": feeLocale,
-            //    "FeeEntity": feeEntity,
-            //    "EntityProperty": entityProperty,
-            //    "FeeType": feeType,
-            //    "FeeValue": feeValue,
-            //    "PercValue": percValue === undefined ? null : percValue,
-            //    "Specificity": feeSpecData[i].split('*').length - 1
-            //};
-            //tree.insert(data);
         }
-        //return await tree;
+
+        // sort array by accending order 1,2....n
+        feesResult.sort(function (first, second) {
+            return first.Specificity - second.Specificity;
+        });
         return await feesResult;
     }
     else {
