@@ -1,5 +1,6 @@
 const helpers = require("../../helpers/response");
 const { _feesMiddleWearAction } = require("../middleware/fees_middleware");
+const { _feesService } = require("../services/fees_service");
 
 const {
     _clearError,
@@ -25,9 +26,16 @@ exports._feesController = async (req, res) => {
             helpers._showError(res, 500, _sendError());
         }
         else {
-            return res.status(200).json({
-                "status": "ok"
-            });
+            if (_feesResult.length > 0) {
+                let result = await _feesService(_feesResult);
+                console.log(result);
+                return res.status(200).json({
+                    "status": "ok"
+                });
+            }
+            else {
+
+            }
         }
         _clearError();
     }
