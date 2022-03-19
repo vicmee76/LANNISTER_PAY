@@ -13,3 +13,5 @@ app.use(bodyParser.json());
 
 app.use('/api/fees', feesRoute);
 app.use('/api/compute-transaction-fee', computeTransactionRoute);
+
+module.exports = app;
