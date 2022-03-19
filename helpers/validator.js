@@ -78,6 +78,16 @@ const _checkFeeValue = (feeValue, res) => {
 }
 
 
+const compareCurrencyOrFeeEntityOrLocal = (arrValue, itemValue, anonymousValue) => {
+    return result = (arrValue === itemValue || arrValue === anonymousValue) ? true : false;
+}
+
+
+const compareEntityProperty = (arrValue, arrPaymentEntity, anonymousValue) => {
+    return result = (arrValue === arrPaymentEntity.Issuer || arrValue === arrPaymentEntity.Brand || arrValue === arrPaymentEntity.Number || arrValue === arrPaymentEntity.SixID || arrValue === anonymousValue) ? true : false;
+}
+
+
 const _sendError = () => {
     return _erroMsg;
 }
@@ -97,5 +107,7 @@ module.exports =
     _checkFeeType,
     _checkFeeValue,
     _sendError,
-    _clearError
+    _clearError,
+    compareCurrencyOrFeeEntityOrLocal,
+    compareEntityProperty
 };
