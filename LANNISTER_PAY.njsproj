@@ -46,9 +46,6 @@
     <Content Include="api\routes\fees_route.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="api\services\fees_service.js">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="app.js" />
     <Content Include="helpers\response.js">
       <SubType>Code</SubType>
@@ -66,7 +63,6 @@
     <Folder Include="api\controllers\" />
     <Folder Include="api\middleware\" />
     <Folder Include="api\models\" />
-    <Folder Include="api\services\" />
     <Folder Include="api\routes\" />
     <Folder Include="helpers\" />
     <Folder Include="api\" />
