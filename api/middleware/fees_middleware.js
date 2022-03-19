@@ -8,7 +8,7 @@ const {
     _otherChecks,
     _checkFeeType,
     _checkFeeValue,
-    calculateFeeType
+    _calculateFeeType
 } = require("../../helpers/validator");
 
 
@@ -72,9 +72,24 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
 
 
 
-const _calculateTransactionFee = async () => {
-
+const _getAppliedFee = async (amount, feeType, feeValue, percValue) => {
+    return appliedFee = _calculateFeeType(feeType, feeValue, percValue, amount);
 }
 
 
-module.exports = { _feesMiddleWearAction };
+const _getchargeAmount = async (bearsFees, amount) => {
+    return chargeAmount = bearsFees === true ? amount + appliedFee : amount;
+}
+
+
+const _getsettlementAmount = async (chargeAmount, appliedFee) => {
+    return settlementAmount = chargeAmount - appliedFee;
+}
+
+
+module.exports = {
+    _feesMiddleWearAction,
+    _getAppliedFee,
+    _getchargeAmount,
+    _getsettlementAmount
+};

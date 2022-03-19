@@ -86,7 +86,7 @@ const _compareEntityProperty = (arrValue, arrPaymentEntity, anonymousValue) => {
 }
 
 
-const calculateFeeType = (feeType, feeValue, percValue, transAmt) => {
+const _calculateFeeType = (feeType, feeValue, percValue, transAmt) => {
     let AppliedFeeValue = 0;
     if (feeType === "FLAT") {
         AppliedFeeValue = feeValue;

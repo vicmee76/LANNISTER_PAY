@@ -1,5 +1,4 @@
 const helpers = require("../../helpers/response");
-const { _feesMiddleWearAction } = require("../middleware/fees_middleware");
 const FeesModel = require("../models/fees_model");
 
 const {
@@ -9,6 +8,13 @@ const {
     _compareCurrencyOrFeeEntityOrLocal,
     _compareEntityProperty
 } = require("../../helpers/validator");
+
+const {
+    _feesMiddleWearAction, _feesMiddleWearAction,
+    _getAppliedFee,
+    _getchargeAmount,
+    _getsettlementAmount } = require("../middleware/fees_middleware");
+
 
 let _feesResult = [];
 
