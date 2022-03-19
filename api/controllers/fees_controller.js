@@ -9,6 +9,7 @@ const {
     _compareEntityProperty
 } = require("../../helpers/validator");
 
+
 const {
     _feesMiddleWearAction,
     _getAppliedFee,
@@ -21,7 +22,6 @@ let _feesResult = [];
 exports._feesController = async (req, res) => {
     try {
         _feesResult = null;
-
         const data = req.body;
         if (data === null || data.FeeConfigurationSpec === "")
             helpers._showError(res, 400, "Fees configuration spec cannot be null");
@@ -77,7 +77,6 @@ exports._ComputeTransactionFees = async (req, res) => {
         let foundFee = [];
         let payEntity = _checkFeeEntity(PaymentEntity.Type);
         let payLocale = data.CurrencyCountry === PaymentEntity.Country ? "LOCL" : "INTL";
-
         let feesLength = _feesResult.length;
 
         if (feesLength > 0) {

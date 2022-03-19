@@ -23,7 +23,9 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
         }
 
         let itemLength = feeSpecData.length;
+
         for (let i = 0; i < itemLength; i++) {
+
             let item = feeSpecData[i].split(' ');
             let feeId = _checkFeesId(item[0], res);
             let curreny = _checkFeesCurrency(item[1].toUpperCase(), res);
@@ -38,6 +40,7 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
             let feeType = _checkFeeType(item[6].toUpperCase(), res);
             let feeValue;
             let percValue;
+
             if (item[7].includes(":")) {
                 let values = item[7].split(':');
                 feeValue = _checkFeeValue(values[0]);
@@ -46,6 +49,7 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
             else {
                 feeValue = _checkFeeValue(item[7]);
             }
+
             feesResult.push({
                 "FeeId": feeId,
                 "FeeCurrency": curreny,
@@ -63,6 +67,7 @@ const _feesMiddleWearAction = async (feesSpecs, res) => {
         feesResult.sort(function (first, second) {
             return first.Specific - second.Specific;
         });
+
         return await feesResult;
     }
     else {

@@ -35,6 +35,7 @@ const _checkFeeLocale = (feeLocale, res) => {
     }
 }
 
+
 const _checkFeeEntity = (feeEntity, res) => {
     if (FEE_ENTITY.includes(feeEntity)) {
         return feeEntity;
@@ -43,7 +44,6 @@ const _checkFeeEntity = (feeEntity, res) => {
         _erroMsg.push(`Invalid fee entity ${feeEntity}`);
     }
 }
-
 
 
 const _otherChecks = (item, res) => {
@@ -104,6 +104,7 @@ const _calculateFeeType = (feeType, feeValue, percValue, transAmt) => {
 const _sendError = () => {
     return _erroMsg;
 }
+
 
 const _clearError = () => {
     return _erroMsg.length = 0;
