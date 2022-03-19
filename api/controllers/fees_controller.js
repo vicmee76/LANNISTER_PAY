@@ -6,8 +6,8 @@ const {
     _clearError,
     _sendError,
     _checkFeeEntity,
-    compareCurrencyOrFeeEntityOrLocal,
-    compareEntityProperty
+    _compareCurrencyOrFeeEntityOrLocal,
+    _compareEntityProperty
 } = require("../../helpers/validator");
 
 let _feesResult = [];
@@ -60,6 +60,8 @@ exports._feesController = async (req, res) => {
 };
 
 
+
+
 exports._ComputeTransactionFees = async (req, res) => {
     try {
         const data = req.body;
@@ -72,6 +74,23 @@ exports._ComputeTransactionFees = async (req, res) => {
 
         let feesLength = _feesResult.length;
 
+        //FeesModel.find(
+        //    {
+        //        $and: [
+        //            { $or: [{ FeeCurrency: payCurrency }, { FeeCurrency: "*" }] },
+        //            { $or: [{ FeeEntity: payEntity }, { FeeEntity: "*" }] },
+        //            { $or: [{ FeeLocale: payLocale }, { FeeLocale: "*" }] },
+        //            { $or: [{ EntityProperty: PaymentEntity.Issuer }, { EntityProperty: PaymentEntity.Brand }, { EntityProperty: PaymentEntity.Number }, { EntityProperty: PaymentEntity.SixID }, { EntityProperty: "*" }] },
+        //        ]
+        //    }
+        //)
+        //    .select("-_id -__v")
+        //    .exec()
+        //    .then(result => {
+        //        helpers._showError(res, 500, result);
+        //    })
+        //    .catch();
+
         if (feesLength > 0) {
             if (data.Amount >= 0) {
                 if (_sendError().length > 0) {
@@ -80,10 +99,10 @@ exports._ComputeTransactionFees = async (req, res) => {
                 else {
                     for (let i = 0; i < feesLength; i++) {
 
-                        let hasCurrency = compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeCurrency"], payCurrency, "*");
-                        let hasFeeEntity = compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeEntity"], payEntity, "*");
-                        let hasLocal = compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeLocale"], payLocale, "*");;
-                        let hasFeeEntityProperty = compareEntityProperty(_feesResult[i]["EntityProperty"], PaymentEntity, "*");
+                        let hasCurrency = _compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeCurrency"], payCurrency, "*");
+                        let hasFeeEntity = _compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeEntity"], payEntity, "*");
+                        let hasLocal = _compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeLocale"], payLocale, "*");;
+                        let hasFeeEntityProperty = _compareEntityProperty(_feesResult[i]["EntityProperty"], PaymentEntity, "*");
 
                         if (hasCurrency === true && hasFeeEntity === true && hasLocal === true && hasFeeEntityProperty === true) {
                             foundFee.push(_feesResult[i]);
