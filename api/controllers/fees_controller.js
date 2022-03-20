@@ -44,7 +44,7 @@ exports._feesController = async (req, res) => {
                             });
                         }
                         else {
-                            res.status(200).json({
+                            res.status(400).json({
                                 "Error": "Something went wron trying to save this record"
                             });
                         }
@@ -68,7 +68,7 @@ exports._feesController = async (req, res) => {
 
 
 
-exports._ComputeTransactionFees = async (req, res) => {
+exports._computeTransactionFees = async (req, res) => {
     try {
         const data = req.body;
         let Customer = data.Customer;
