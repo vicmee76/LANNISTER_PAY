@@ -1,6 +1,4 @@
 
-const { _showError } = require("./response");
-
 const FEE_LOCALE = ['LOCL', 'INTL', '*'];
 const FEE_ENTITY = ['CREDIT-CARD', 'DEBIT-CARD', 'BANK-ACCOUNT', 'USSD', 'WALLET-ID', '*'];
 const FEE_TYPE = ['FLAT', 'PERC', 'FLAT_PERC'];
@@ -37,6 +35,7 @@ const _checkFeeLocale = (feeLocale, res) => {
     }
 }
 
+
 const _checkFeeEntity = (feeEntity, res) => {
     if (FEE_ENTITY.includes(feeEntity)) {
         return feeEntity;
@@ -45,7 +44,6 @@ const _checkFeeEntity = (feeEntity, res) => {
         _erroMsg.push(`Invalid fee entity ${feeEntity}`);
     }
 }
-
 
 
 const _otherChecks = (item, res) => {
@@ -78,19 +76,35 @@ const _checkFeeValue = (feeValue, res) => {
 }
 
 
-const compareCurrencyOrFeeEntityOrLocal = (arrValue, itemValue, anonymousValue) => {
+const _compareCurrencyOrFeeEntityOrLocal = (arrValue, itemValue, anonymousValue) => {
     return result = (arrValue === itemValue || arrValue === anonymousValue) ? true : false;
 }
 
 
-const compareEntityProperty = (arrValue, arrPaymentEntity, anonymousValue) => {
+const _compareEntityProperty = (arrValue, arrPaymentEntity, anonymousValue) => {
     return result = (arrValue === arrPaymentEntity.Issuer || arrValue === arrPaymentEntity.Brand || arrValue === arrPaymentEntity.Number || arrValue === arrPaymentEntity.SixID || arrValue === anonymousValue) ? true : false;
+}
+
+
+const _calculateFeeType = (feeType, feeValue, percValue, transAmt) => {
+    let AppliedFeeValue = 0;
+    if (feeType === "FLAT") {
+        AppliedFeeValue = feeValue;
+    }
+    else if (feeType === "FLAT_PERC") {
+        AppliedFeeValue = feeValue + ((percValue / 100) * transAmt);
+    }
+    else if (feeType === "PERC") {
+        AppliedFeeValue = (feeValue / 100) * transAmt;
+    }
+    return Math.round(AppliedFeeValue);
 }
 
 
 const _sendError = () => {
     return _erroMsg;
 }
+
 
 const _clearError = () => {
     return _erroMsg.length = 0;
@@ -108,6 +122,7 @@ module.exports =
     _checkFeeValue,
     _sendError,
     _clearError,
-    compareCurrencyOrFeeEntityOrLocal,
-    compareEntityProperty
+    _compareCurrencyOrFeeEntityOrLocal,
+    _compareEntityProperty,
+    _calculateFeeType
 };

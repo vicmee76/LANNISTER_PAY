@@ -1,17 +1,23 @@
 const helpers = require("../../helpers/response");
-const { _feesMiddleWearAction } = require("../middleware/fees_middleware");
+const FeesModel = require("../models/fees_model");
 
 const {
     _clearError,
     _sendError,
-    _checkFeesCurrency,
     _checkFeeEntity,
-    compareCurrencyOrFeeEntityOrLocal,
-    compareEntityProperty
+    _compareCurrencyOrFeeEntityOrLocal,
+    _compareEntityProperty
 } = require("../../helpers/validator");
 
 
-let _feesResult=[];
+const {
+    _feesMiddleWearAction,
+    _getAppliedFee,
+    _getchargeAmount,
+    _getsettlementAmount } = require("../middleware/fees_middleware");
+
+
+let _feesResult = [];
 
 exports._feesController = async (req, res) => {
     try {
@@ -20,15 +26,37 @@ exports._feesController = async (req, res) => {
         if (data === null || data.FeeConfigurationSpec === "")
             helpers._showError(res, 400, "Fees configuration spec cannot be null");
         let feesConfigSpec = data.FeeConfigurationSpec.split("\n");
-         _feesResult = await _feesMiddleWearAction(feesConfigSpec, res);
+        let _feesValidationResults = await _feesMiddleWearAction(feesConfigSpec, res);
 
         if (_sendError().length > 0) {
             helpers._showError(res, 500, _sendError());
         }
         else {
-            return res.status(200).json({
-                "status": "ok"
-            });
+            if (_feesValidationResults.length > 0) {
+
+                await FeesModel.deleteMany();
+                await FeesModel.insertMany(_feesValidationResults)
+                    .then(result => {
+                        if (result.length > 0) {
+                            _feesResult = result;
+                            res.status(200).json({
+                                "status": "ok"
+                            });
+                        }
+                        else {
+                            res.status(200).json({
+                                "Error": "Something went wron trying to save this record"
+                            });
+                        }
+                    }).catch(err => {
+                        res.status(500).json({
+                            "Error": err
+                        });
+                    });
+            }
+            else {
+                helpers._showError(res, 500, "Fees configuration spec result is empty");
+            }
         }
         _clearError();
     }
@@ -38,16 +66,18 @@ exports._feesController = async (req, res) => {
 };
 
 
+
+
 exports._ComputeTransactionFees = async (req, res) => {
     try {
         const data = req.body;
-        let Customers = data.Customers;
+        let Customer = data.Customer;
         let PaymentEntity = data.PaymentEntity;
-        let feesLength = _feesResult.length;
         let payCurrency = data.Currency;
         let foundFee = [];
         let payEntity = _checkFeeEntity(PaymentEntity.Type);
         let payLocale = data.CurrencyCountry === PaymentEntity.Country ? "LOCL" : "INTL";
+        let feesLength = _feesResult.length;
 
         if (feesLength > 0) {
             if (data.Amount >= 0) {
@@ -57,19 +87,26 @@ exports._ComputeTransactionFees = async (req, res) => {
                 else {
                     for (let i = 0; i < feesLength; i++) {
 
-                        let hasCurrency = compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeCurrency"], payCurrency, "*");
-                        let hasFeeEntity = compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeEntity"], payEntity, "*");
-                        let hasLocal = compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeLocale"], payLocale, "*");;
-                        let hasFeeEntityProperty = compareEntityProperty(_feesResult[i]["EntityProperty"], PaymentEntity, "*");
+                        let hasCurrency = _compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeCurrency"], payCurrency, "*");
+                        let hasFeeEntity = _compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeEntity"], payEntity, "*");
+                        let hasLocal = _compareCurrencyOrFeeEntityOrLocal(_feesResult[i]["FeeLocale"], payLocale, "*");;
+                        let hasFeeEntityProperty = _compareEntityProperty(_feesResult[i]["EntityProperty"], PaymentEntity, "*");
 
                         if (hasCurrency === true && hasFeeEntity === true && hasLocal === true && hasFeeEntityProperty === true) {
                             foundFee.push(_feesResult[i]);
                         }
                     }
                     if (foundFee.length > 0) {
+                        let appliedFee = _getAppliedFee(data.Amount, foundFee[0]["FeeType"], foundFee[0]["FeeValue"], foundFee[0]["PercValue"]);
+                        let chargeAmount = _getchargeAmount(Customer.BearsFee, data.Amount);
+                        let settlementAmount = _getsettlementAmount(chargeAmount, appliedFee);
 
-
-                        helpers._showError(res, 500, foundFee[0]["FeeId"]);
+                       return await res.status(200).json({
+                            "AppliedFeeID": _feesResult[0]["FeeId"],
+                            "AppliedFeeValue": appliedFee,
+                            "ChargeAmount": chargeAmount,
+                            "SettlementAmount": settlementAmount,
+                        });
                     }
                     else {
                         helpers._showError(res, 500, "No payment template was found for this payload");
@@ -81,9 +118,10 @@ exports._ComputeTransactionFees = async (req, res) => {
             }
         }
         else {
-            helpers._showError(res, 500, "Please call the fees endpoint first.");
+            helpers._showError(res, 500, "Please call the fees end point before calling the compute endpoint");
         }
         _clearError();
+
     } catch (e) {
         helpers._showError(res, 500, e.message);
     }

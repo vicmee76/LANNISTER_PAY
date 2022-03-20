@@ -37,6 +37,9 @@
     <Content Include="api\middleware\fees_middleware.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="api\models\fees_model.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="api\routes\compute_transaction_fees_route.js">
       <SubType>Code</SubType>
     </Content>
@@ -59,7 +62,7 @@
   <ItemGroup>
     <Folder Include="api\controllers\" />
     <Folder Include="api\middleware\" />
-    <Folder Include="api\services\" />
+    <Folder Include="api\models\" />
     <Folder Include="api\routes\" />
     <Folder Include="helpers\" />
     <Folder Include="api\" />
